@@ -1,0 +1,13 @@
+{
+  "name": "mach",
+  "displayName": "mach",
+  "description": "Medien-Generierung über die kie.ai-API mit Kostenfreigabe: Bilder, Videos (Veo 3.1, Kling 3, Seedance 2 Mini), Musik und Sprache — immer mit schnellem und hochwertigem Modell, generiert erst nach expliziter Kosten-Freigabe.",
+  "version": "1.0.0",
+  "author": {
+    "name": "vitd",
+    "url": "https://github.com/vitd"
+  },
+  "repository": "https://github.com/vitd/mach",
+  "license": "MIT",
+  "keywords": ["kie.ai", "image", "video", "music", "audio", "generation"]
+}

@@ -18,22 +18,38 @@ die [kie.ai](https://kie.ai)-API generiert — mit Kostenkontrolle:
 
 ## Installation
 
-1. Repository in das Skill-Verzeichnis legen (global):
+### Empfohlen: als Plugin (mit automatischen Updates)
 
-   ```bash
-   git clone <repo-url> ~/.claude/skills/mach
-   ```
+In Claude Code:
 
-   Oder projektbezogen nach `<projekt>/.claude/skills/mach`.
+```
+/plugin marketplace add vitd/mach
+/plugin install mach@mach
+```
 
-2. API-Key von https://kie.ai/api-key besorgen und als Umgebungsvariable
+Der Skill heißt dann `/mach:mach` (bei eindeutiger Eingabe reicht meist
+`/mach`).
+
+### Alternativ: als Skill-Verzeichnis
+
+Repository in das Skill-Verzeichnis legen (global):
+
+```bash
+git clone https://github.com/vitd/mach.git ~/.claude/skills/mach
+```
+
+Oder projektbezogen nach `<projekt>/.claude/skills/mach`.
+
+### In beiden Fällen danach
+
+1. API-Key von https://kie.ai/api-key besorgen und als Umgebungsvariable
    setzen (z. B. in `~/.bashrc` / `~/.zshrc`):
 
    ```bash
    export KIE_AI_API_KEY="dein-key"
    ```
 
-3. Python 3 muss verfügbar sein (nur Standardbibliothek, keine Pakete nötig).
+2. Python 3 muss verfügbar sein (nur Standardbibliothek, keine Pakete nötig).
 
 ## Verwendung
 
