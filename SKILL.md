@@ -18,9 +18,11 @@ description: >
 Dieser Skill erzeugt Bilder, Videos, Musik und Audio über die kie.ai-API.
 Drei Grundprinzipien bestimmen jeden Durchlauf:
 
-1. **Doppelgenerierung:** Jeder Auftrag läuft mit ZWEI Modellen — einem
+1. **Mehrfachgenerierung:** Jeder Auftrag läuft mit ZWEI Modellen — einem
    schnellen (günstige Vorschau, schnelles Ergebnis) und einem hochwertigen
-   (bestes Ergebnis). Beide starten parallel nach der Freigabe.
+   (bestes Ergebnis). Ausnahme Video: dort sind es DREI Modelle (Seedance 2
+   Mini als schnelles, Veo 3.1 und Kling 3 als Qualitätsmodelle). Alle
+   freigegebenen Tasks starten parallel nach der Freigabe.
 2. **Kostenfreigabe:** Vor JEDER Generierung werden die Kosten (Credits und
    USD, pro Modell und Summe) sowie das aktuelle Guthaben angezeigt. Ohne
    ausdrückliche Freigabe des Nutzers wird NICHTS generiert — das ist der
@@ -57,10 +59,11 @@ Aus dem Prompt des Nutzers bestimmen:
 Reine Textgenerierung braucht keine kie.ai-API — Texte direkt selbst
 schreiben und dem Nutzer sagen, dass dafür keine Kosten anfallen.
 
-### Schritt 2: Modellpaar wählen
+### Schritt 2: Modelle wählen
 
-`references/models.md` lesen. Dort steht für jede Modalität das Standard-
-Paar (Qualität + Schnell), die ungefähren Kosten und die Doku-URLs.
+`references/models.md` lesen. Dort stehen für jede Modalität die
+Standard-Modelle (Qualität + Schnell; bei Video ein Trio aus Seedance 2
+Mini, Veo 3.1 und Kling 3), die ungefähren Kosten und die Doku-URLs.
 
 Wichtig: kie.ai ändert Modelle und Preise laufend. Vor der ersten Nutzung
 eines Modells in einer Session die in `references/models.md` verlinkte
@@ -99,19 +102,31 @@ Sonderfälle:
 
    | Modell | Rolle | Kosten |
    |---|---|---|
-   | veo3_fast | Schnell | 80 Credits (~0,40 $) |
-   | veo3 | Qualität | 400 Credits (~2,00 $) |
-   | **Summe** | | **480 Credits (~2,40 $)** |
+   | bytedance/seedance-2-mini | Schnell | ca. 30 Credits (~0,15 $) |
+   | veo3 (Veo 3.1) | Qualität | 400 Credits (~2,00 $) |
+   | kling-3.0/video | Qualität | ca. 220 Credits (~1,10 $) |
+   | **Summe** | | **ca. 650 Credits (~3,25 $)** |
+
+   (Beispielwerte — die echten Zahlen kommen aus Schritt 2.)
 
    Dazu: aktuelles Guthaben, gewählte Parameter (Dauer, Format, …) und die
    Referenz-URLs. Reicht das Guthaben nicht, das klar sagen und auf
    https://kie.ai/pricing zum Aufladen verweisen — nicht generieren.
 
-4. Freigabe einholen — mit AskUserQuestion, Optionen:
+4. Freigabe einholen — mit AskUserQuestion. Bei zwei Modellen:
    - „Beide generieren" (Empfohlen — schnelle Vorschau + beste Qualität)
    - „Nur schnelles Modell"
    - „Nur Qualitätsmodell"
    - „Abbrechen"
+
+   Bei Video (drei Modelle):
+   - „Alle drei generieren" (Empfohlen)
+   - „Nur Seedance 2 Mini (schnell)"
+   - „Nur die Qualitätsmodelle (Veo 3.1 + Kling 3)"
+   - „Abbrechen"
+
+   Andere Kombinationen kann der Nutzer über „Other" frei angeben. In den
+   Options-Beschreibungen jeweils die Kosten der Auswahl nennen.
 
    Ohne ausdrückliche Zustimmung wird KEIN Task erstellt. Das gilt auch,
    wenn der Nutzer im ursprünglichen Prompt schon „mach einfach" gesagt
@@ -124,7 +139,8 @@ Sonderfälle:
 Nach der Freigabe die freigegebenen Tasks starten — bei „Beide" wirklich
 beide direkt nacheinander anlegen, dann gemeinsam pollen.
 
-**Markt-Modelle (Jobs-API)** — Bilder, Seedance-Videos, ElevenLabs-Audio:
+**Markt-Modelle (Jobs-API)** — Bilder, Seedance- und Kling-Videos,
+ElevenLabs-Audio:
 
 ```bash
 python3 scripts/kie.py run "google/nano-banana" \

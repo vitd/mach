@@ -11,7 +11,7 @@
     {
       "id": 2,
       "prompt": "/mach ein 8-Sekunden-Video: eine Drohnenaufnahme über einem Weinberg bei Sonnenuntergang. Nutze das angehängte Foto als Stilreferenz.",
-      "expected_output": "Skill lädt das Referenzbild über die Upload-API hoch, wählt veo3 + veo3_fast (imageUrls gesetzt), zeigt Kosten (~2,00 $ + ~0,40 $) und generiert erst nach Freigabe über den Veo-Endpoint.",
+      "expected_output": "Skill lädt das Referenzbild über die Upload-API hoch, wählt das Video-Trio Seedance 2 Mini + Veo 3.1 (veo3) + Kling 3 (kling-3.0/video) mit dem Bild als Referenz, zeigt die Kosten aller drei Modelle plus Summe und generiert erst nach Freigabe (Seedance/Kling über die Jobs-API, Veo über den Veo-Endpoint).",
       "files": ["referenz.jpg"]
     },
     {

@@ -28,26 +28,46 @@ Grok-Imagine-Modelle.
 
 ## Video
 
-| Rolle | Modell | Kosten (ca.) | Doku |
-|---|---|---|---|
-| Qualität | `veo3` (Veo-Endpoint) | ca. 2,00 $ / 8-s-Video (400 Credits) | https://docs.kie.ai/veo3-api/generate-veo-3-video |
-| Schnell | `veo3_fast` (Veo-Endpoint) | ca. 0,40 $ / 8-s-Video (80 Credits) | dito |
+Video weicht vom Zwei-Modell-Schema ab: Hier laufen standardmäßig DREI
+Modelle — ein schnelles und zwei Qualitätsmodelle:
 
-Veo läuft über den eigenen Endpoint (`kie.py veo-run`), NICHT über die
-Jobs-API. Wichtige Felder: `prompt`, `model` (`veo3` / `veo3_fast`),
-`aspect_ratio` (`16:9`, `9:16`, `Auto`), `duration` (4/6/8 s),
-`resolution` (`720p`/`1080p`), `imageUrls` (1–2 Referenzbilder für
-Image-to-Video), `generationType` (`TEXT_2_VIDEO`,
-`FIRST_AND_LAST_FRAMES_2_VIDEO`, `REFERENCE_2_VIDEO`).
-Hinweis: `veo3` (Qualität) unterstützt nur Text-/Image-to-Video.
+| Rolle | Modell | API | Kosten (ca.) | Doku |
+|---|---|---|---|---|
+| Schnell | `bytedance/seedance-2-mini` | Jobs-API | günstigstes der drei; live prüfen | https://docs.kie.ai/market/bytedance/seedance-2-mini |
+| Qualität | `veo3` (= Veo 3.1) | Veo-Endpoint | ca. 2,00 $ / 8-s-Video (400 Credits) | https://docs.kie.ai/veo3-api/generate-veo-3-video |
+| Qualität | `kling-3.0/video` (Kling 3.0) | Jobs-API | live prüfen | https://docs.kie.ai/market/kling/kling-3-0 |
 
-Alternative über die Jobs-API — sinnvoll bei Video-/Audio-Referenzen, die
-Veo nicht annimmt: Qualität `bytedance/seedance-2`
-(https://docs.kie.ai/market/bytedance/seedance-2), Schnell
-`bytedance/seedance-2-fast`
-(https://docs.kie.ai/market/bytedance/seedance-2-fast). Seedance 2 nimmt
-`reference_image_urls`, `reference_video_urls`, `reference_audio_urls`,
-`first_frame_url`, `last_frame_url`.
+Für Kling 3 und Seedance 2 Mini liegen keine verlässlichen Richtpreise
+vor — vor der Kostenübersicht IMMER live prüfen (Doku-Seite bzw.
+https://kie.ai/pricing) und im Zweifel als „ca."-Wert kennzeichnen.
+
+**Seedance 2 Mini** (Jobs-API): `prompt`, `duration` (4–15 s, Default 5),
+`resolution` (`480p`/`720p`), `aspect_ratio` (`16:9`, `9:16`, `1:1`,
+`4:3`, `3:4`, `21:9`, `adaptive`), `generate_audio` (bool),
+`first_frame_url`, `last_frame_url`, `reference_image_urls` (bis 9),
+`reference_video_urls` (bis 3, max. 15 s), `reference_audio_urls` (bis 3).
+Nimmt als einziges der drei auch Video- und Audio-Referenzen an.
+
+**Veo 3.1** läuft über den eigenen Endpoint (`kie.py veo-run`), NICHT über
+die Jobs-API. Felder: `prompt`, `model` (`veo3` = Qualität; `veo3_fast` /
+`veo3_lite` existieren als günstigere Varianten, sind hier aber nicht Teil
+des Standard-Trios), `aspect_ratio` (`16:9`, `9:16`, `Auto`), `duration`
+(4/6/8 s), `resolution` (`720p`/`1080p`), `imageUrls` (1–2 Referenzbilder),
+`generationType` (`TEXT_2_VIDEO`, `FIRST_AND_LAST_FRAMES_2_VIDEO`,
+`REFERENCE_2_VIDEO`). `veo3` unterstützt nur Text-/Image-to-Video.
+
+**Kling 3.0** (Jobs-API): `prompt`, `image_urls` (First/Last-Frame),
+`duration` (3–15 s), `aspect_ratio` (`16:9`, `9:16`, `1:1`), `mode`
+(`std` = 720p, `pro` = 1080p, `4K`), `sound` (bool), `multi_shots` +
+`multi_prompt` für Mehrschnitt-Videos. Der `mode` beeinflusst den Preis —
+bei der Kostenprüfung berücksichtigen.
+
+Da die drei Modelle unterschiedliche Parameter haben: gemeinsame Wünsche
+des Nutzers (Dauer, Format, Ton) auf die jeweiligen Felder jedes Modells
+abbilden und Abweichungen (z. B. Veo kann max. 8 s) in der Kostenübersicht
+erwähnen. Referenzen, die ein Modell nicht annimmt (z. B. Videoreferenz
+bei Veo/Kling), nur bei Seedance 2 Mini verwenden und das transparent
+machen.
 
 ## Musik
 

@@ -6,7 +6,8 @@ die [kie.ai](https://kie.ai)-API generiert — mit Kostenkontrolle:
 - **`/mach <prompt>`** startet den Skill mit einer Beschreibung dessen, was
   generiert werden soll.
 - Jede Generierung läuft mit **zwei Modellen**: einem schnellen (günstige,
-  schnelle Vorschau) und einem hochwertigen (bestes Ergebnis).
+  schnelle Vorschau) und einem hochwertigen (bestes Ergebnis). Bei **Video**
+  sind es drei: Seedance 2 Mini (schnell), Veo 3.1 und Kling 3 (Qualität).
 - **Vor** jeder Generierung zeigt der Skill die Kosten (Credits + USD) und
   das aktuelle Guthaben an. Generiert wird **erst nach expliziter
   Freigabe** — wahlweise beide Modelle, nur das schnelle oder nur das
