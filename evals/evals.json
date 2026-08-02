@@ -1,0 +1,30 @@
+{
+  "skill_name": "mach",
+  "note": "Live-Läufe erfordern einen echten KIE_AI_API_KEY und verursachen Kosten pro Generierung. Die Prompts hier dienen als Testfälle, sobald ein Key (idealerweise mit kleinem Testguthaben) verfügbar ist. Erwartetes Kernverhalten in allen Fällen: Kostenübersicht VOR der Generierung, keine Task-Erstellung ohne explizite Freigabe.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/mach ein Bild von einer Bergkette im Morgennebel, fotorealistisch, 16:9",
+      "expected_output": "Skill wählt das Bild-Modellpaar (Nano Banana Pro + Nano Banana), zeigt Kosten pro Modell + Summe + Guthaben, fragt per AskUserQuestion nach Freigabe (Beide/Nur schnell/Nur Qualität/Abbrechen) und generiert erst danach. Ergebnisse landen in ./mach-output/ mit beiden Varianten.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "/mach ein 8-Sekunden-Video: eine Drohnenaufnahme über einem Weinberg bei Sonnenuntergang. Nutze das angehängte Foto als Stilreferenz.",
+      "expected_output": "Skill lädt das Referenzbild über die Upload-API hoch, wählt veo3 + veo3_fast (imageUrls gesetzt), zeigt Kosten (~2,00 $ + ~0,40 $) und generiert erst nach Freigabe über den Veo-Endpoint.",
+      "files": ["referenz.jpg"]
+    },
+    {
+      "id": 3,
+      "prompt": "mach mir daraus bitte eine Audio-Version zum Anhören (Datei: kapitel1.md)",
+      "expected_output": "Skill erkennt TTS, liest die Textdatei (kein Upload), prüft die ElevenLabs-Doku für längenabhängige Kosten, zeigt die Kostenschätzung für die konkrete Textlänge und generiert erst nach Freigabe mit multilingual-v2 + turbo-2-5.",
+      "files": ["kapitel1.md"]
+    },
+    {
+      "id": 4,
+      "prompt": "/mach schreib mir ein Gedicht über den Herbst",
+      "expected_output": "Skill erkennt reine Textgenerierung, schreibt das Gedicht direkt selbst und erklärt, dass dafür keine kie.ai-Kosten anfallen. Keine API-Aufrufe, keine Freigabe-Abfrage.",
+      "files": []
+    }
+  ]
+}

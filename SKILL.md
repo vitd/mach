@@ -1,0 +1,183 @@
+---
+name: mach
+description: >
+  Generiert Bilder, Videos, Musik, Sprache und Soundeffekte über die kie.ai-API
+  (Veo, Nano Banana, Seedance, Suno, ElevenLabs u. a.). Jede Generierung läuft
+  parallel mit einem schnellen UND einem hochwertigen Modell, und zwar erst nach
+  expliziter Kostenfreigabe durch den Nutzer. Referenzdateien (Bilder, Texte,
+  Audio, Video) können angehängt werden. Diesen Skill immer verwenden, wenn der
+  Nutzer "/mach" oder "mach" gefolgt von einem Generierungswunsch eingibt, oder
+  wenn er Bilder, Videos, Musik oder Audio über kie.ai erzeugen möchte — auch
+  wenn er kie.ai nicht ausdrücklich nennt, aber KI-Medien-Generierung mit
+  Kostenkontrolle gemeint ist. Use this skill whenever the user invokes /mach
+  or asks to generate images, video, music, or audio via the kie.ai API.
+---
+
+# mach — Medien-Generierung über kie.ai mit Kostenfreigabe
+
+Dieser Skill erzeugt Bilder, Videos, Musik und Audio über die kie.ai-API.
+Drei Grundprinzipien bestimmen jeden Durchlauf:
+
+1. **Doppelgenerierung:** Jeder Auftrag läuft mit ZWEI Modellen — einem
+   schnellen (günstige Vorschau, schnelles Ergebnis) und einem hochwertigen
+   (bestes Ergebnis). Beide starten parallel nach der Freigabe.
+2. **Kostenfreigabe:** Vor JEDER Generierung werden die Kosten (Credits und
+   USD, pro Modell und Summe) sowie das aktuelle Guthaben angezeigt. Ohne
+   ausdrückliche Freigabe des Nutzers wird NICHTS generiert — das ist der
+   Kern dieses Skills, denn jede Generierung kostet echtes Geld.
+3. **Referenzen:** Der Nutzer kann lokale Dateien (Bilder, Texte, Audio,
+   Videos) anhängen. Sie werden zu kie.ai hochgeladen und als Referenz-URLs
+   an das Modell übergeben.
+
+## Voraussetzungen
+
+- Umgebungsvariable `KIE_AI_API_KEY` (alternativ `KIE_API_KEY`) mit einem
+  API-Key von https://kie.ai/api-key. Fehlt der Key, bricht `scripts/kie.py`
+  mit einer klaren Meldung ab — dann den Nutzer bitten, den Key zu setzen,
+  und nicht weitermachen.
+- Python 3 (nur Standardbibliothek, keine Installation nötig).
+
+Alle API-Aufrufe laufen über `scripts/kie.py` (relativ zu diesem Skill-
+Verzeichnis). Aufruf: `python3 <skill-dir>/scripts/kie.py <befehl> ...`.
+Übersicht: `python3 scripts/kie.py --help`.
+
+## Ablauf
+
+### Schritt 1: Auftrag verstehen
+
+Aus dem Prompt des Nutzers bestimmen:
+
+- **Modalität:** Bild, Video, Musik, Sprache (TTS) oder Soundeffekt.
+  Bei Unklarheit (z. B. „mach etwas zu Sonnenuntergang") nachfragen.
+- **Referenzen:** Hat der Nutzer Dateipfade oder URLs angehängt bzw. erwähnt?
+- **Parameter:** Seitenverhältnis, Dauer, Auflösung, Stil — sofern genannt.
+  Nicht Genanntes mit sinnvollen Defaults belegen und diese in der
+  Kostenübersicht mit anzeigen.
+
+Reine Textgenerierung braucht keine kie.ai-API — Texte direkt selbst
+schreiben und dem Nutzer sagen, dass dafür keine Kosten anfallen.
+
+### Schritt 2: Modellpaar wählen
+
+`references/models.md` lesen. Dort steht für jede Modalität das Standard-
+Paar (Qualität + Schnell), die ungefähren Kosten und die Doku-URLs.
+
+Wichtig: kie.ai ändert Modelle und Preise laufend. Vor der ersten Nutzung
+eines Modells in einer Session die in `references/models.md` verlinkte
+Doku-Seite per WebFetch prüfen (exakte Modell-ID, Input-Schema, aktueller
+Preis). Erst wenn ID und Schema bestätigt sind, weiter zu Schritt 4.
+
+### Schritt 3: Referenzen hochladen
+
+Für jede angehängte lokale Datei:
+
+```bash
+python3 scripts/kie.py upload /pfad/zur/datei.jpg
+```
+
+Das lädt die Datei zu kie.ai hoch und gibt eine `downloadUrl` zurück
+(24 Stunden gültig). Diese URLs je nach Modell als `image_urls`,
+`imageUrls`, `reference_image_urls`, `reference_video_urls`,
+`reference_audio_urls` usw. in den Input einsetzen — die genauen
+Feldnamen stehen in der Modell-Doku (siehe `references/api.md`).
+
+Sonderfälle:
+- **Textdateien** nicht hochladen, sondern lesen und den Inhalt sinnvoll in
+  den Prompt einarbeiten (z. B. als Stil- oder Inhaltsvorgabe).
+- **URLs**, die der Nutzer direkt angibt, unverändert verwenden (kein
+  Upload nötig).
+- Dateien über ~100 MB: den Nutzer warnen, dass der Upload dauern kann.
+
+### Schritt 4: Kosten ermitteln und Freigabe einholen
+
+1. Guthaben abfragen: `python3 scripts/kie.py credit`
+   (Ausgabe in Credits; 1 Credit ≈ 0,005 USD).
+2. Kosten beider Modelle aus `references/models.md` bzw. der live geprüften
+   Doku bestimmen. Bei Werten, die nur „ca." bekannt sind, das auch so
+   kennzeichnen — niemals geschätzte Kosten als exakt ausgeben.
+3. Übersicht anzeigen, etwa so:
+
+   | Modell | Rolle | Kosten |
+   |---|---|---|
+   | veo3_fast | Schnell | 80 Credits (~0,40 $) |
+   | veo3 | Qualität | 400 Credits (~2,00 $) |
+   | **Summe** | | **480 Credits (~2,40 $)** |
+
+   Dazu: aktuelles Guthaben, gewählte Parameter (Dauer, Format, …) und die
+   Referenz-URLs. Reicht das Guthaben nicht, das klar sagen und auf
+   https://kie.ai/pricing zum Aufladen verweisen — nicht generieren.
+
+4. Freigabe einholen — mit AskUserQuestion, Optionen:
+   - „Beide generieren" (Empfohlen — schnelle Vorschau + beste Qualität)
+   - „Nur schnelles Modell"
+   - „Nur Qualitätsmodell"
+   - „Abbrechen"
+
+   Ohne ausdrückliche Zustimmung wird KEIN Task erstellt. Das gilt auch,
+   wenn der Nutzer im ursprünglichen Prompt schon „mach einfach" gesagt
+   hat — die Freigabe bezieht sich auf die konkrete Kostensumme und muss
+   nach deren Anzeige erfolgen. Läuft die Session nicht-interaktiv (keine
+   Rückfrage möglich), die Kostenübersicht ausgeben und stoppen.
+
+### Schritt 5: Generieren
+
+Nach der Freigabe die freigegebenen Tasks starten — bei „Beide" wirklich
+beide direkt nacheinander anlegen, dann gemeinsam pollen.
+
+**Markt-Modelle (Jobs-API)** — Bilder, Seedance-Videos, ElevenLabs-Audio:
+
+```bash
+python3 scripts/kie.py run "google/nano-banana" \
+  --input '{"prompt": "...", "image_urls": ["https://..."]}' \
+  --out ./mach-output
+```
+
+**Veo-Videos** (eigener Endpoint):
+
+```bash
+python3 scripts/kie.py veo-run \
+  --input '{"prompt": "...", "model": "veo3_fast", "aspect_ratio": "16:9"}' \
+  --out ./mach-output
+```
+
+**Suno-Musik** (eigener Endpoint): Die Doku-Seite aus `references/models.md`
+lesen und die generischen Befehle `kie.py post` / `kie.py get` verwenden
+(Details in `references/api.md`).
+
+`run`/`veo-run` erstellen den Task, pollen bis zum Abschluss und laden die
+Ergebnisse nach `--out` herunter. Videos können mehrere Minuten dauern —
+das ist normal, nicht abbrechen. Bei zwei parallelen Tasks: beide mit
+`create`/`veo-create` starten, dann nacheinander mit `wait`/`veo-wait`
+abholen (die Generierung läuft serverseitig parallel weiter).
+
+### Schritt 6: Ergebnis berichten
+
+- Lokale Dateipfade beider Ergebnisse (schnell + Qualität) nennen.
+- Tatsächlich verbrauchte Credits nennen (`creditsConsumed` aus der
+  Task-Antwort) und mit der Schätzung vergleichen; Restguthaben anzeigen.
+- Bei Fehlschlag eines Tasks: Fehlermeldung (`failMsg`) wiedergeben.
+  Fehlgeschlagene Tasks kosten in der Regel nichts — das Guthaben
+  gegenprüfen. Nur nach Rücksprache erneut versuchen (neue Kosten!).
+- kie.ai-Ergebnis-URLs verfallen nach einiger Zeit — deshalb sind die
+  heruntergeladenen lokalen Dateien das eigentliche Ergebnis.
+
+## Referenzdateien
+
+- `references/models.md` — Modellkatalog: Standard-Paare (Qualität/Schnell)
+  je Modalität, Kosten, Doku-URLs. Vor jeder Kostenschätzung lesen.
+- `references/api.md` — kie.ai-API-Details: Endpoints, Request/Response-
+  Formate, Upload-API, Fehlerbehandlung. Lesen, wenn `kie.py` nicht reicht
+  (z. B. Suno, neue Modelle, Debugging).
+
+## Fehlerbehandlung
+
+- **401:** API-Key ungültig/fehlt → Nutzer bitten, `KIE_AI_API_KEY` zu prüfen.
+- **402 / Guthaben-Fehler:** Credits reichen nicht → Guthaben anzeigen,
+  auf https://kie.ai/pricing verweisen.
+- **429:** Rate-Limit (20 Requests/10 s) → kurz warten, dann weiter.
+- **`state: fail`:** `failCode`/`failMsg` dem Nutzer zeigen. Häufige
+  Ursachen: Inhaltsfilter (Prompt umformulieren), ungültige Referenz-URL
+  (Upload wiederholen — URLs verfallen nach 24 h).
+- **Timeout beim Pollen:** Task-ID nennen; mit
+  `python3 scripts/kie.py status <taskId>` kann später weiter gepollt
+  werden — der Task läuft serverseitig weiter.
