@@ -12,18 +12,32 @@ Nutzer auch als Circa-Werte präsentieren.
 
 ## Bild
 
+Bei Bildern stehen ZWEI Qualitätsmodelle zur Wahl — Nano Banana Pro und
+GPT Image 2. Alle drei Modelle kommen in die Kostenübersicht; welche
+generieren, entscheidet der Nutzer bei der Freigabe (siehe SKILL.md
+Schritt 4):
+
 | Rolle | Modell-ID (Jobs-API) | Kosten (ca.) | Doku |
 |---|---|---|---|
-| Qualität | `google/nano-banana-pro` | ca. 0,10 $ / Bild | https://docs.kie.ai/market/google/pro-image-to-image |
 | Schnell | `google/nano-banana` | ca. 0,02 $ / Bild | https://docs.kie.ai/market/google/nano-banana |
+| Qualität | `google/nano-banana-pro` | ca. 0,10 $ / Bild | https://docs.kie.ai/market/google/pro-image-to-image |
+| Qualität (Alternative) | `gpt-image-2-text-to-image` | live prüfen | https://docs.kie.ai/market/gpt/gpt-image-2-text-to-image |
 
-Wichtige Input-Felder: `prompt`, `image_urls` (Referenzbilder, nur bei
-Edit-/i2i-Varianten), `output_format` (`png`/`jpeg`), `aspect_ratio` bzw.
-`image_size`. Achtung: Für Bildbearbeitung mit Referenzbild ggf. die
-Edit-Variante des Modells verwenden (eigene Modell-ID, siehe Doku).
+**Nano Banana / Nano Banana Pro:** `prompt`, `image_urls` (Referenzbilder,
+nur bei Edit-/i2i-Varianten — eigene Modell-ID, siehe Doku),
+`output_format` (`png`/`jpeg`), `aspect_ratio` bzw. `image_size`.
 
-Alternativen (bei Bedarf über https://kie.ai/market prüfen):
-`bytedance/seedream-v4` (+ `.../seedream-v4-edit`), Flux-, GPT-Image- und
+**GPT Image 2** (OpenAIs neuestes Bildmodell, stark bei Fotorealismus und
+Text im Bild): `prompt` (bis 20 000 Zeichen), `aspect_ratio` (`auto`,
+`1:1`, `3:2`, `2:3`, `4:3`, `3:4`, `16:9`, `9:16`, `21:9` u. a.),
+`resolution` (`1K`/`2K`/`4K`; nicht jede Kombination erlaubt — z. B. kein
+4K bei `1:1`, einige Seitenverhältnisse nur in 1K). Mit Referenzbildern
+stattdessen die i2i-Variante `gpt-image-2-image-to-image` verwenden
+(`input_urls` statt `image_urls`;
+https://docs.kie.ai/market/gpt/gpt-image-2-image-to-image).
+
+Weitere Alternativen (bei Bedarf über https://kie.ai/market prüfen):
+`bytedance/seedream-v4` (+ `.../seedream-v4-edit`), Flux-2- und
 Grok-Imagine-Modelle.
 
 ## Video

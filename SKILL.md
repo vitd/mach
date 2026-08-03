@@ -21,8 +21,9 @@ Drei Grundprinzipien bestimmen jeden Durchlauf:
 1. **Mehrfachgenerierung:** Jeder Auftrag läuft mit ZWEI Modellen — einem
    schnellen (günstige Vorschau, schnelles Ergebnis) und einem hochwertigen
    (bestes Ergebnis). Ausnahme Video: dort sind es DREI Modelle (Seedance 2
-   Mini als schnelles, Veo 3.1 und Kling 3 als Qualitätsmodelle). Alle
-   freigegebenen Tasks starten parallel nach der Freigabe.
+   Mini als schnelles, Veo 3.1 und Kling 3 als Qualitätsmodelle). Bei Bild
+   stehen zwei Qualitätsmodelle zur Wahl (Nano Banana Pro und GPT Image 2).
+   Alle freigegebenen Tasks starten parallel nach der Freigabe.
 2. **Kostenfreigabe:** Vor JEDER Generierung werden die Kosten (Credits und
    USD, pro Modell und Summe) sowie das aktuelle Guthaben angezeigt. Ohne
    ausdrückliche Freigabe des Nutzers wird NICHTS generiert — das ist der
@@ -134,6 +135,16 @@ Sonderfälle:
    - „Nur schnelles Modell"
    - „Nur Qualitätsmodell"
    - „Abbrechen"
+
+   Bei Bild (ein schnelles Modell, zwei Qualitätsmodelle zur Wahl):
+   - „Nano Banana + Nano Banana Pro" (Empfohlen)
+   - „Nano Banana + GPT Image 2"
+   - „Alle drei generieren"
+   - „Abbrechen"
+
+   Geht es erkennbar um Fotorealismus oder Text im Bild (Plakate, Logos
+   mit Schriftzug), stattdessen „Nano Banana + GPT Image 2" als
+   empfohlene Option zuerst nennen — das ist die Stärke von GPT Image 2.
 
    Bei Video (drei Modelle):
    - „Alle drei generieren" (Empfohlen)
