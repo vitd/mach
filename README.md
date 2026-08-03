@@ -40,16 +40,26 @@ git clone https://github.com/vitd/mach.git ~/.claude/skills/mach
 
 Oder projektbezogen nach `<projekt>/.claude/skills/mach`.
 
-### In beiden Fällen danach
+### In beiden Fällen danach: API-Key hinterlegen
 
-1. API-Key von https://kie.ai/api-key besorgen und als Umgebungsvariable
-   setzen (z. B. in `~/.bashrc` / `~/.zshrc`):
+Key von https://kie.ai/api-key besorgen, dann eine der beiden Varianten:
 
-   ```bash
-   export KIE_AI_API_KEY="dein-key"
-   ```
+- **Umgebungsvariable** (empfohlen, z. B. in `~/.bashrc` / `~/.zshrc`):
 
-2. Python 3 muss verfügbar sein (nur Standardbibliothek, keine Pakete nötig).
+  ```bash
+  export KIE_AI_API_KEY="dein-key"
+  ```
+
+- **Im Skill speichern** — einfach den Skill benutzen: Fehlt der Key, fragt
+  er einmalig danach und speichert ihn in `~/.config/mach/config.json`
+  (nur für deinen Benutzer lesbar). Manuell geht das auch direkt:
+
+  ```bash
+  python3 scripts/kie.py set-key "dein-key"
+  python3 scripts/kie.py key-status
+  ```
+
+Python 3 muss verfügbar sein (nur Standardbibliothek, keine Pakete nötig).
 
 ## Verwendung
 

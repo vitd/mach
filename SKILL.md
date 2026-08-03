@@ -33,11 +33,27 @@ Drei Grundprinzipien bestimmen jeden Durchlauf:
 
 ## Voraussetzungen
 
-- Umgebungsvariable `KIE_AI_API_KEY` (alternativ `KIE_API_KEY`) mit einem
-  API-Key von https://kie.ai/api-key. Fehlt der Key, bricht `scripts/kie.py`
-  mit einer klaren Meldung ab — dann den Nutzer bitten, den Key zu setzen,
-  und nicht weitermachen.
+- Ein kie.ai-API-Key (erstellen unter https://kie.ai/api-key). Der Key wird
+  in dieser Reihenfolge gesucht: Umgebungsvariable `KIE_AI_API_KEY` (oder
+  `KIE_API_KEY`), dann Konfigdatei `~/.config/mach/config.json`.
 - Python 3 (nur Standardbibliothek, keine Installation nötig).
+
+**Erste Einrichtung:** Ist kein Key vorhanden (prüfbar mit
+`python3 scripts/kie.py key-status`), den Nutzer EINMALIG nach seinem
+API-Key fragen und ihn speichern:
+
+```bash
+python3 scripts/kie.py set-key DER_KEY
+```
+
+Dabei transparent dazusagen: Der Key wird lokal in
+`~/.config/mach/config.json` gespeichert (nur für den Benutzer lesbar),
+und die Eingabe im Chat bleibt im Chatverlauf sichtbar — wer das vermeiden
+will, setzt stattdessen die Umgebungsvariable. In Umgebungen ohne
+persistentes Dateisystem (z. B. claude.ai-Chats) gilt der gespeicherte Key
+nur für die laufende Unterhaltung und muss beim nächsten Mal neu angegeben
+werden. Den Key niemals ungefragt ausgeben, loggen oder committen;
+`key-status` zeigt ihn nur maskiert.
 
 Alle API-Aufrufe laufen über `scripts/kie.py` (relativ zu diesem Skill-
 Verzeichnis). Aufruf: `python3 <skill-dir>/scripts/kie.py <befehl> ...`.

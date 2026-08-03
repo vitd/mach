@@ -2,6 +2,8 @@
 """kie.py — Kommandozeilen-Helfer für die kie.ai-API (nur Python-Standardbibliothek).
 
 Befehle:
+  set-key KEY                     API-Key einmalig lokal speichern (chmod 600)
+  key-status                      Zeigt, ob und woher ein API-Key geladen wird
   credit                          Guthaben abfragen (Credits; 1 Credit ~ 0,005 USD)
   upload DATEI [DATEI...]         Datei(en) hochladen, gibt downloadUrl zurück (24 h gültig)
 
@@ -19,7 +21,8 @@ Befehle:
   get PFAD [--param k=v ...]      Generischer GET auf api.kie.ai
   download URL [URL...] --out D   Ergebnis-URLs herunterladen
 
-Authentifizierung: Umgebungsvariable KIE_AI_API_KEY (oder KIE_API_KEY).
+Authentifizierung: Umgebungsvariable KIE_AI_API_KEY (oder KIE_API_KEY),
+alternativ gespeicherter Key aus ~/.config/mach/config.json (via set-key).
 Alle Ausgaben sind JSON (eine Struktur pro Zeile), Fehler gehen nach stderr mit Exitcode != 0.
 """
 
@@ -51,11 +54,31 @@ def die(msg, code=1):
     sys.exit(code)
 
 
+def config_path():
+    base = os.environ.get("XDG_CONFIG_HOME") or os.path.join(
+        os.path.expanduser("~"), ".config"
+    )
+    return os.path.join(base, "mach", "config.json")
+
+
+def load_config():
+    try:
+        with open(config_path(), "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
 def api_key():
-    key = os.environ.get("KIE_AI_API_KEY") or os.environ.get("KIE_API_KEY")
+    key = (
+        os.environ.get("KIE_AI_API_KEY")
+        or os.environ.get("KIE_API_KEY")
+        or load_config().get("api_key")
+    )
     if not key:
         die(
-            "Kein API-Key gefunden. Bitte die Umgebungsvariable KIE_AI_API_KEY setzen "
+            "Kein API-Key gefunden. Entweder die Umgebungsvariable KIE_AI_API_KEY "
+            "setzen oder den Key einmalig speichern mit: kie.py set-key DEIN_KEY "
             "(Key erstellen unter https://kie.ai/api-key)."
         )
     return key
@@ -112,6 +135,33 @@ def out(obj):
 
 
 # ---------------------------------------------------------------- Befehle
+
+
+def cmd_set_key(args):
+    path = config_path()
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    cfg = load_config()
+    cfg["api_key"] = args.key.strip()
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        json.dump(cfg, f)
+    os.chmod(path, 0o600)
+    out({"gespeichert": path, "hinweis": "Datei ist nur für den aktuellen Benutzer lesbar (600)."})
+
+
+def cmd_key_status(_args):
+    if os.environ.get("KIE_AI_API_KEY") or os.environ.get("KIE_API_KEY"):
+        source = "Umgebungsvariable"
+    elif load_config().get("api_key"):
+        source = f"Konfigdatei ({config_path()})"
+    else:
+        source = None
+    if source:
+        key = api_key()
+        masked = key[:4] + "…" + key[-4:] if len(key) > 10 else "…"
+        out({"vorhanden": True, "quelle": source, "key": masked})
+    else:
+        out({"vorhanden": False, "quelle": None})
 
 
 def cmd_credit(_args):
@@ -381,6 +431,14 @@ def main():
     sub = p.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("credit").set_defaults(func=cmd_credit)
+
+    sp = sub.add_parser("set-key", help="API-Key lokal speichern (~/.config/mach/config.json)")
+    sp.add_argument("key")
+    sp.set_defaults(func=cmd_set_key)
+
+    sub.add_parser("key-status", help="Zeigt, ob und woher ein API-Key geladen wird").set_defaults(
+        func=cmd_key_status
+    )
 
     sp = sub.add_parser("upload")
     sp.add_argument("files", nargs="+")
