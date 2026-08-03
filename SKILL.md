@@ -182,16 +182,40 @@ das ist normal, nicht abbrechen. Bei zwei parallelen Tasks: beide mit
 `create`/`veo-create` starten, dann nacheinander mit `wait`/`veo-wait`
 abholen (die Generierung läuft serverseitig parallel weiter).
 
-### Schritt 6: Ergebnis berichten
+### Schritt 6: Ergebnisse herunterladen und im Chat zeigen
 
-- Lokale Dateipfade beider Ergebnisse (schnell + Qualität) nennen.
-- Tatsächlich verbrauchte Credits nennen (`creditsConsumed` aus der
-  Task-Antwort) und mit der Schätzung vergleichen; Restguthaben anzeigen.
+**Immer herunterladen, nie nur verlinken.** kie.ai-Ergebnis-URLs verfallen
+nach einiger Zeit — die lokalen Dateien sind das eigentliche Ergebnis.
+`run`/`veo-run` laden automatisch herunter (`--out`, Standard
+`./mach-output`); nach jedem Lauf prüfen, dass `localFiles` gefüllt ist.
+Bei Abläufen, die nur URLs liefern (z. B. Suno über `post`/`get`), sofort
+`kie.py download <urls> --out ./mach-output` nachschieben.
+
+**Ergebnisse direkt im Chat präsentieren**, damit der Nutzer sie sofort
+beurteilen kann, statt Pfade oder Links abzutippen:
+
+- Die Ergebnisdateien mit dem in der Umgebung verfügbaren
+  Datei-Präsentations-Tool an den Nutzer senden — z. B. `SendUserFile`
+  (bei Bildern mit `display: "render"`, damit sie inline erscheinen) oder
+  `present_files`. Bilder einzeln und klar beschriftet senden (welches
+  Modell, welche Variante), damit der Vergleich schnell/Qualität leicht
+  fällt. Videos und Audiodateien ebenfalls als Datei senden.
+- Gibt es kein solches Tool (z. B. lokale CLI), die Dateipfade nennen —
+  das ist der Fallback, nicht der Normalfall.
+- Bilder zusätzlich selbst ansehen (Read auf die Bilddatei) und in ein,
+  zwei Sätzen einordnen: Was unterscheidet die schnelle von der
+  Qualitäts-Variante, gibt es sichtbare Fehler (Artefakte, falscher Text,
+  ignorierte Vorgaben)? Bei offensichtlichen Fehlschlägen gleich eine
+  konkrete Prompt-Verbesserung vorschlagen — aber nicht ungefragt neu
+  generieren (neue Kosten).
+
+**Außerdem berichten:**
+
+- Tatsächlich verbrauchte Credits (`creditsConsumed` aus der Task-Antwort)
+  je Modell, Vergleich mit der Schätzung, Restguthaben.
 - Bei Fehlschlag eines Tasks: Fehlermeldung (`failMsg`) wiedergeben.
   Fehlgeschlagene Tasks kosten in der Regel nichts — das Guthaben
   gegenprüfen. Nur nach Rücksprache erneut versuchen (neue Kosten!).
-- kie.ai-Ergebnis-URLs verfallen nach einiger Zeit — deshalb sind die
-  heruntergeladenen lokalen Dateien das eigentliche Ergebnis.
 
 ## Referenzdateien
 
