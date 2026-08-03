@@ -1,5 +1,23 @@
 # kie.ai-API-Referenz
 
+## Benötigte Netzwerk-Freigaben
+
+In Umgebungen mit Egress-Allowlist (claude.ai-Sandbox, Claude-Code-
+Web-Environments mit Netzwerk-Policy) müssen DREI Domains freigegeben
+sein — die Upload-API läuft auf einer anderen Domain als die Task-API:
+
+| Domain | Zweck |
+|---|---|
+| `api.kie.ai` | Task-API (createTask, recordInfo, Veo, Suno, Guthaben) |
+| `kieai.redpandaai.co` | Datei-Upload für Referenzen (file-stream-upload) |
+| `tempfile.redpandaai.co` | Abruf hochgeladener Dateien und vieler Ergebnis-URLs |
+
+Ergebnis-URLs können je nach Modell auch auf weiteren Hosts liegen — bei
+einem Download-Fehler die Domain aus `resultUrls` ablesen und nennen.
+Schlägt der Upload mit HTTP 403 (Cloudflare) fehl, obwohl die Task-API
+funktioniert, fehlt fast immer die Freigabe für `kieai.redpandaai.co` —
+dem Nutzer dann genau diese Domain-Liste nennen.
+
 Basis-URL: `https://api.kie.ai` — Auth immer per Header
 `Authorization: Bearer $KIE_AI_API_KEY`. Alle Generierungs-APIs sind
 asynchron: Task anlegen → `taskId` erhalten → pollen. HTTP 200 beim

@@ -97,6 +97,11 @@ python3 scripts/kie.py veo-run --input '{"prompt":"...","model":"veo3_fast"}' --
 
 ## Hinweise
 
+- In Umgebungen mit Netzwerk-Allowlist müssen drei Domains freigegeben
+  sein: `api.kie.ai` (Task-API), `kieai.redpandaai.co` (Referenz-Upload)
+  und `tempfile.redpandaai.co` (Datei-Abruf). Details in
+  `references/api.md`.
+
 - Preise in `references/models.md` sind Richtwerte; der Skill prüft die
   Modell-Doku vor der Kostenschätzung. Aktuelle Preise: https://kie.ai/pricing
 - Upload-URLs für Referenzen sind 24 Stunden gültig.
