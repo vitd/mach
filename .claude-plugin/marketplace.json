@@ -11,7 +11,7 @@
       "source": "./",
       "displayName": "mach",
       "description": "Generiert Bilder, Videos, Musik und Audio über die kie.ai-API (Veo 3.1, Kling 3, Seedance 2 Mini, Nano Banana, GPT Image 2, Suno, ElevenLabs). Läuft immer mit schnellem und hochwertigem Modell parallel, zeigt vor jeder Generierung die Kosten an und startet erst nach expliziter Freigabe. Referenzdateien (Bilder, Texte, Audio, Video) können angehängt werden.",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "category": "media",
       "keywords": ["kie.ai", "image", "video", "music", "audio", "generation", "veo", "kling", "seedance"],
       "license": "MIT",

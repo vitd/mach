@@ -136,15 +136,19 @@ Sonderfälle:
    - „Nur Qualitätsmodell"
    - „Abbrechen"
 
-   Bei Bild (ein schnelles Modell, zwei Qualitätsmodelle zur Wahl):
-   - „Nano Banana + Nano Banana Pro" (Empfohlen)
-   - „Nano Banana + GPT Image 2"
-   - „Alle drei generieren"
-   - „Abbrechen"
+   Bei Bild (ein schnelles Modell, zwei Qualitätsmodelle) eine
+   Mehrfachauswahl (multiSelect) verwenden, damit jede Kombination
+   möglich ist — Frage: „Welche Modelle sollen generieren?", Optionen:
+   - „Nano Banana (schnell)" — mit Kosten in der Beschreibung
+   - „Nano Banana Pro (Qualität)" — mit Kosten
+   - „GPT Image 2 (Qualität)" — mit Kosten
 
-   Geht es erkennbar um Fotorealismus oder Text im Bild (Plakate, Logos
-   mit Schriftzug), stattdessen „Nano Banana + GPT Image 2" als
-   empfohlene Option zuerst nennen — das ist die Stärke von GPT Image 2.
+   In der Frage die empfohlene Kombination nennen: normalerweise
+   Nano Banana + Nano Banana Pro; bei erkennbarem Fokus auf Fotorealismus
+   oder Text im Bild (Plakate, Logos mit Schriftzug) Nano Banana +
+   GPT Image 2 — das ist die Stärke von GPT Image 2. Wählt der Nutzer
+   nichts aus oder schließt die Frage, gilt das als Abbruch — nichts
+   generieren.
 
    Bei Video (drei Modelle):
    - „Alle drei generieren" (Empfohlen)
