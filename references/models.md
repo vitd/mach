@@ -22,6 +22,7 @@ Schritt 4):
 | Schnell | `google/nano-banana` | ca. 0,02 $ / Bild | https://docs.kie.ai/market/google/nano-banana |
 | Qualität | `google/nano-banana-pro` | ca. 0,10 $ / Bild | https://docs.kie.ai/market/google/pro-image-to-image |
 | Qualität (Alternative) | `gpt-image-2-text-to-image` | live prüfen | https://docs.kie.ai/market/gpt/gpt-image-2-text-to-image |
+| Qualität (Alternative) | `qwen3/pro-text-to-image` | live prüfen | https://docs.kie.ai/market/qwen3-pro/text-to-image |
 
 **Nano Banana / Nano Banana Pro:** `prompt`, `image_urls` (Referenzbilder,
 nur bei Edit-/i2i-Varianten — eigene Modell-ID, siehe Doku),
@@ -36,24 +37,36 @@ stattdessen die i2i-Variante `gpt-image-2-image-to-image` verwenden
 (`input_urls` statt `image_urls`;
 https://docs.kie.ai/market/gpt/gpt-image-2-image-to-image).
 
+**Qwen Image 3.0 Pro** (Alibaba; stark bei Typografie — auch sehr kleiner
+Text, dichte Layouts wie Zeitungen/Menüs/UI-Mockups, 12 Sprachen nativ):
+`prompt` (max. 800 Zeichen), `resolution` (`1K`/`2K`), `image_size`
+(`1:1`, `3:2`, `2:3`, `4:3`, `3:4`, `16:9`, `9:16`, `21:9`),
+`output_format` (`png`/`jpeg`), `negative_prompt`, `prompt_extend`
+(automatische Prompt-Verbesserung, Default an), `seed`. Mit
+Referenzbildern die i2i-Variante `qwen3/pro-image-to-image`
+(https://docs.kie.ai/market/qwen3-pro/image-to-image).
+
 Weitere Alternativen (bei Bedarf über https://kie.ai/market prüfen):
 `bytedance/seedream-v4` (+ `.../seedream-v4-edit`), Flux-2- und
 Grok-Imagine-Modelle.
 
 ## Video
 
-Video weicht vom Zwei-Modell-Schema ab: Hier laufen standardmäßig DREI
-Modelle — ein schnelles und zwei Qualitätsmodelle:
+Video weicht vom Zwei-Modell-Schema ab: Zur Wahl stehen VIER Modelle —
+ein schnelles und drei Qualitätsmodelle. Standardempfehlung ist das Trio
+Seedance 2 Mini + Veo 3.1 + Kling 3; Seedance 2.5 zusätzlich empfehlen,
+wenn lange Clips (über 15 s, bis 30 s) oder viele Referenzen gefragt sind:
 
 | Rolle | Modell | API | Kosten (ca.) | Doku |
 |---|---|---|---|---|
-| Schnell | `bytedance/seedance-2-mini` | Jobs-API | günstigstes der drei; live prüfen | https://docs.kie.ai/market/bytedance/seedance-2-mini |
+| Schnell | `bytedance/seedance-2-mini` | Jobs-API | günstigstes der vier; live prüfen | https://docs.kie.ai/market/bytedance/seedance-2-mini |
 | Qualität | `veo3` (= Veo 3.1) | Veo-Endpoint | ca. 2,00 $ / 8-s-Video (400 Credits) | https://docs.kie.ai/veo3-api/generate-veo-3-video |
 | Qualität | `kling-3.0/video` (Kling 3.0) | Jobs-API | live prüfen | https://docs.kie.ai/market/kling/kling-3-0 |
+| Qualität | `bytedance/seedance-2-5` (Seedance 2.5) | Jobs-API | live prüfen; Dauer beeinflusst Preis | https://docs.kie.ai/market/bytedance/seedance-2-5 |
 
-Für Kling 3 und Seedance 2 Mini liegen keine verlässlichen Richtpreise
-vor — vor der Kostenübersicht IMMER live prüfen (Doku-Seite bzw.
-https://kie.ai/pricing) und im Zweifel als „ca."-Wert kennzeichnen.
+Für Kling 3, Seedance 2 Mini und Seedance 2.5 liegen keine verlässlichen
+Richtpreise vor — vor der Kostenübersicht IMMER live prüfen (Doku-Seite
+bzw. https://kie.ai/pricing) und im Zweifel als „ca."-Wert kennzeichnen.
 
 **Seedance 2 Mini** (Jobs-API): `prompt`, `duration` (4–15 s, Default 5),
 `resolution` (`480p`/`720p`), `aspect_ratio` (`16:9`, `9:16`, `1:1`,
@@ -75,6 +88,16 @@ des Standard-Trios), `aspect_ratio` (`16:9`, `9:16`, `Auto`), `duration`
 (`std` = 720p, `pro` = 1080p, `4K`), `sound` (bool), `multi_shots` +
 `multi_prompt` für Mehrschnitt-Videos. Der `mode` beeinflusst den Preis —
 bei der Kostenprüfung berücksichtigen.
+
+**Seedance 2.5** (Jobs-API; ByteDances neuestes Videomodell): `prompt`
+(bis 30 000 Zeichen), `duration` (4–30 s, Default 5, `-1` = automatisch),
+`resolution` (`480p`/`720p`), `aspect_ratio` (wie Mini, plus `adaptive`),
+`generate_audio` (Default an, erhöht den Preis), `return_last_frame`,
+`reference_image_urls` (bis 30), `reference_video_urls` (bis 10, je
+2–30 s), `reference_audio_urls` (bis 10, je 2–30 s, max. 15 MB).
+First-Frame-, First+Last-Frame- und Referenz-Modus schließen sich
+gegenseitig aus. Stärken: lange Clips in einem Durchgang (bis 30 s) und
+sehr viele Referenzen.
 
 Da die drei Modelle unterschiedliche Parameter haben: gemeinsame Wünsche
 des Nutzers (Dauer, Format, Ton) auf die jeweiligen Felder jedes Modells

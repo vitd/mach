@@ -20,10 +20,10 @@ Drei Grundprinzipien bestimmen jeden Durchlauf:
 
 1. **Mehrfachgenerierung:** Jeder Auftrag läuft mit ZWEI Modellen — einem
    schnellen (günstige Vorschau, schnelles Ergebnis) und einem hochwertigen
-   (bestes Ergebnis). Ausnahme Video: dort sind es DREI Modelle (Seedance 2
-   Mini als schnelles, Veo 3.1 und Kling 3 als Qualitätsmodelle). Bei Bild
-   stehen zwei Qualitätsmodelle zur Wahl (Nano Banana Pro und GPT Image 2).
-   Alle freigegebenen Tasks starten parallel nach der Freigabe.
+   (bestes Ergebnis). Bei Bild stehen drei Qualitätsmodelle zur Wahl
+   (Nano Banana Pro, GPT Image 2, Qwen Image 3.0 Pro), bei Video ebenfalls
+   drei (Veo 3.1, Kling 3, Seedance 2.5) neben dem schnellen Seedance 2
+   Mini. Alle freigegebenen Tasks starten parallel nach der Freigabe.
 2. **Kostenfreigabe:** Vor JEDER Generierung werden die Kosten (Credits und
    USD, pro Modell und Summe) sowie das aktuelle Guthaben angezeigt. Ohne
    ausdrückliche Freigabe des Nutzers wird NICHTS generiert — das ist der
@@ -136,28 +136,33 @@ Sonderfälle:
    - „Nur Qualitätsmodell"
    - „Abbrechen"
 
-   Bei Bild (ein schnelles Modell, zwei Qualitätsmodelle) eine
-   Mehrfachauswahl (multiSelect) verwenden, damit jede Kombination
-   möglich ist — Frage: „Welche Modelle sollen generieren?", Optionen:
-   - „Nano Banana (schnell)" — mit Kosten in der Beschreibung
-   - „Nano Banana Pro (Qualität)" — mit Kosten
-   - „GPT Image 2 (Qualität)" — mit Kosten
+   Bei Bild und Video eine Mehrfachauswahl (multiSelect) verwenden, damit
+   jede Kombination möglich ist — Frage: „Welche Modelle sollen
+   generieren?", je Option Kosten in der Beschreibung, empfohlene
+   Kombination im Fragetext. Wählt der Nutzer nichts aus oder schließt
+   die Frage, gilt das als Abbruch — nichts generieren.
 
-   In der Frage die empfohlene Kombination nennen: normalerweise
-   Nano Banana + Nano Banana Pro; bei erkennbarem Fokus auf Fotorealismus
-   oder Text im Bild (Plakate, Logos mit Schriftzug) Nano Banana +
-   GPT Image 2 — das ist die Stärke von GPT Image 2. Wählt der Nutzer
-   nichts aus oder schließt die Frage, gilt das als Abbruch — nichts
-   generieren.
+   Optionen bei Bild:
+   - „Nano Banana (schnell)"
+   - „Nano Banana Pro (Qualität)"
+   - „GPT Image 2 (Qualität)"
+   - „Qwen Image 3.0 Pro (Qualität)"
 
-   Bei Video (drei Modelle):
-   - „Alle drei generieren" (Empfohlen)
-   - „Nur Seedance 2 Mini (schnell)"
-   - „Nur die Qualitätsmodelle (Veo 3.1 + Kling 3)"
-   - „Abbrechen"
+   Empfehlung: normalerweise Nano Banana + Nano Banana Pro; bei Fokus auf
+   Fotorealismus oder Text im Bild (Plakate, Logos mit Schriftzug)
+   Nano Banana + GPT Image 2; bei dichten Layouts, viel Typografie oder
+   UI-Mockups Nano Banana + Qwen Image 3.0 Pro.
 
-   Andere Kombinationen kann der Nutzer über „Other" frei angeben. In den
-   Options-Beschreibungen jeweils die Kosten der Auswahl nennen.
+   Optionen bei Video:
+   - „Seedance 2 Mini (schnell)"
+   - „Veo 3.1 (Qualität)"
+   - „Kling 3 (Qualität)"
+   - „Seedance 2.5 (Qualität)"
+
+   Empfehlung: normalerweise Seedance 2 Mini + Veo 3.1 + Kling 3; bei
+   langen Clips (über 15 s) oder vielen Referenzdateien stattdessen
+   Seedance 2.5 mit empfehlen — es kann als einziges bis 30 s am Stück
+   und bis zu 30 Bild-, 10 Video- und 10 Audio-Referenzen.
 
    Ohne ausdrückliche Zustimmung wird KEIN Task erstellt. Das gilt auch,
    wenn der Nutzer im ursprünglichen Prompt schon „mach einfach" gesagt
