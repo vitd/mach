@@ -1,5 +1,6 @@
 ---
 name: mach
+version: 1.6.0
 description: >
   Generiert Bilder, Videos, Musik, Sprache und Soundeffekte über die kie.ai-API
   (Veo, Nano Banana, Seedance, Suno, ElevenLabs u. a.). Jede Generierung läuft
@@ -14,6 +15,11 @@ description: >
 ---
 
 # mach — Medien-Generierung über kie.ai mit Kostenfreigabe
+
+Die aktuelle Skill-Version steht oben im Frontmatter (`version`) und in
+`scripts/kie.py --version`. Sie als Fußnote unter der Kostenübersicht
+nennen (z. B. „mach v1.6.0") und nennen, wenn der Nutzer nach der Version
+fragt — so ist immer klar, welcher Stand installiert ist.
 
 Dieser Skill erzeugt Bilder, Videos, Musik und Audio über die kie.ai-API.
 Drei Grundprinzipien bestimmen jeden Durchlauf:

@@ -37,6 +37,8 @@ import urllib.parse
 import urllib.request
 import uuid
 
+VERSION = "1.6.0"
+
 API_BASE = "https://api.kie.ai"
 UPLOAD_BASE = "https://kieai.redpandaai.co"
 USD_PER_CREDIT = 0.005
@@ -428,6 +430,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
+    p.add_argument("--version", action="version", version=f"mach {VERSION}")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("credit").set_defaults(func=cmd_credit)
