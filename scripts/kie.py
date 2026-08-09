@@ -37,7 +37,7 @@ import urllib.parse
 import urllib.request
 import uuid
 
-VERSION = "1.6.0"
+VERSION = "1.6.1"
 
 API_BASE = "https://api.kie.ai"
 UPLOAD_BASE = "https://kieai.redpandaai.co"
